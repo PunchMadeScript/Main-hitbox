@@ -1,0 +1,36 @@
+-- LocalScript to expand hitbox
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Wait for the character to load
+character:WaitForChild("HumanoidRootPart")
+
+local function expandHitbox()
+    local hitboxSize = Vector3.new(10, 10, 10) -- Size of the expanded hitbox
+    local humanoidRootPart = character.HumanoidRootPart
+
+    -- Create a new part for the hitbox
+    local hitboxPart = Instance.new("Part")
+    hitboxPart.Size = hitboxSize
+    hitboxPart.Position = humanoidRootPart.Position
+    hitboxPart.Anchored = true
+    hitboxPart.CanCollide = false
+    hitboxPart.Transparency = 0 -- Make it semi-transparent
+    hitboxPart.Color = Color3.new(1, 0, 0) -- Red color for visibility
+    hitboxPart.Parent = workspace
+
+    -- Attach the hitbox to the player's position
+    while character and character:FindFirstChild("HumanoidRootPart") do
+        hitboxPart.Position = humanoidRootPart.Position
+        wait(0.1) -- Update position every 0.1 seconds
+    end
+
+    -- Clean up when the character is removed
+    if hitboxPart then
+        hitboxPart:Destroy()
+    end
+end
+
+-- Call the function to expand the hitbox
+expandHitbox()
